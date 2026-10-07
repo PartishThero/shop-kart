@@ -4,6 +4,8 @@ import dotenvfrom from 'dotenv'
 import customerRoutes from '../server/routes/customer.routes.js'
 import productRoutes from './routes/product.routes.js'
 import wishlistRoutes from './routes/wishlist.routes.js'
+import cartRoutes from './routes/cart.routes.js'
+import orderRoutes from './routes/order.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
@@ -29,6 +31,8 @@ mongoose.connect(process.env.dbUri).then(() => {
 app.use('/customers', customerRoutes)
 app.use('/products', productRoutes)
 app.use('/wishlist', wishlistRoutes)
+app.use('/cart', cartRoutes)
+app.use('/orders', orderRoutes)
 
 app.get('/', (req, res) => {
     res.send("Hello from server")

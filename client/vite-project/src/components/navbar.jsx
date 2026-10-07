@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 const menus = {
 	Home: "/",
 	Products: ["All Products","Add Product"],
 	Wishlist: "/wishlist",
+    Orders: "/orders",
 };
 
 export default function Navbar() {
 	const [open, setOpen] = useState(null);
+	const { cartCount } = useCart();
 
 		return (
 		<nav className="flex items-center justify-center px-4 py-3 font-sans sm:px-7 sm:py-4.5" aria-label="Main navigation">
@@ -59,6 +62,14 @@ export default function Navbar() {
 						</div>
 					);
 				})}
+
+				<Link
+					to="/cart"
+					className="block rounded-full px-3.75 py-2.5 text-[13px] font-medium transition-colors bg-transparent text-white hover:bg-white hover:text-neutral-950 no-underline"
+				>
+					Cart ({cartCount})
+				</Link>
+
 			</div>
 		</nav>
 	);

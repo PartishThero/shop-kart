@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axiosInstance from "../axiosCalls/axios"
+import { useCart } from "../context/CartContext"
 
 const defaultProduct = {	
 	name: "Everyday Canvas Tote",
@@ -24,6 +25,22 @@ export default function ProductCard({ product = defaultProduct, initialIsAdded =
 	const [error, setError] = useState(null)
 	const {_id, name, category, price, image, stock,} = product;
 	const isInStock = stock > 0;
+
+	const { addToCart, cart } = useCart();
+	const [isAdding, setIsAdding] = useState(false);
+	const inCart = !!cart?.find(item => (item.product?._id || item.product) === _id);
+
+	const handleAddToCart = async (e) => {
+		e.preventDefault();
+		setIsAdding(true);
+		try {
+			await addToCart(_id);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsAdding(false);
+		}
+	};
 
 	useEffect(() => {
 		setIsAdded(initialIsAdded);
@@ -93,15 +110,24 @@ export default function ProductCard({ product = defaultProduct, initialIsAdded =
 					</span>
 				</div>
 
-				<Link
-					className="flex w-full items-center justify-between rounded-xl bg-neutral-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#e76f51] hover:text-neutral-950 focus:outline-none focus:ring-2 focus:ring-[#e76f51] focus:ring-offset-2"
-					to={`/products/${product._id}`}
-				>
-					<span>View details</span>
-					<svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-						<path d="M5 12h14M13 6l6 6-6 6" />
-					</svg>
-				</Link>
+				<div className="flex flex-col gap-2">
+					<button
+						onClick={handleAddToCart}
+						disabled={isAdding || !isInStock}
+						className="flex w-full items-center justify-center rounded-xl bg-neutral-100 px-4 py-3 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-200 disabled:opacity-50"
+					>
+						{isAdding ? "Adding..." : inCart ? "Add Another" : "Add to Cart"}
+					</button>
+					<Link
+						className="flex w-full items-center justify-between rounded-xl bg-neutral-950 px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#e76f51] hover:text-neutral-950 focus:outline-none focus:ring-2 focus:ring-[#e76f51] focus:ring-offset-2"
+						to={`/products/${product._id}`}
+					>
+						<span>View details</span>
+						<svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+							<path d="M5 12h14M13 6l6 6-6 6" />
+						</svg>
+					</Link>
+				</div>
 			</div>
 		</article>
 	);
