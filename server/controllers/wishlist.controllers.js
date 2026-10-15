@@ -30,7 +30,7 @@ export const addToWishlist = async (req, res) => {
         await customer.save()
 
         res.status(200).json({message: "Product added to wishlist successfully"})
-    } catch (error) {
+    } catch (error) { 
         res.status(500).json({message: error.message})
     }
 }

@@ -22,7 +22,7 @@ export const addToCart = async (req, res) => {
         }
 
         await customer.save();
-        const updatedCustomer = await Customer.findById(customer._id).populate('cart.product');
+        const updatedCustomer = await Customer.findById(customer._id).populate('cart.product'); 
         res.status(200).json({ success: true, message: "Cart updated", cart: updatedCustomer.cart });
     } catch (error) {
         res.status(500).json({ message: error.message });

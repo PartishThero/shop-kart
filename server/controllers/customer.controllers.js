@@ -53,7 +53,7 @@ export const logincustomer = async (req, res) => {
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required.' })
         }
-
+ 
         const customer = await Customer.findOne({ email })
         if (!customer) {
             return res.status(401).json({ message: 'Customer not found' })
